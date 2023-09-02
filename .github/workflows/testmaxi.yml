@@ -1,0 +1,35 @@
+name: Merge project DevOps
+
+on:
+  pull_request:
+    branches:
+      - release
+      - dev
+      - main
+    types:
+      - closed
+
+jobs:
+  merge:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Check PR Branch
+        run: |
+          branch_name=$(git rev-parse --abbrev-ref HEAD)
+          if [[ $branch_name == "dev" ]]; then
+            echo "rama: $branch_name  nombre: $GITHUB_ACTOR"
+          elif [[ $branch_name == "release" ]]; then
+            echo "rama: $branch_name  email: $EMAIL"
+          elif [[ $branch_name == "main" ]]; then
+            echo "rama: $branch_name  nombre: $GITHUB_ACTOR  email: $EMAIL"
+          fi
+
+      - name: Curl to URL
+        run: |
+          branch_name=$(git rev-parse --abbrev-ref HEAD)
+          curl_result=$(curl -s -o /dev/null -w "%{http_code}" ${{ secrets.URL }})
+          echo "rama: $branch_name  curl: $curl_result"
