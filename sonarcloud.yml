@@ -44,9 +44,9 @@ jobs:
 
       - name: Run SonarCloud Analysis
         env:
-          ALUMNO: ${{ secrets.ALUMNO }}
-          EMAIL: ${{ secrets.EMAIL }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          ALUMNO: ${{ vars.ALUMNO }}
+          EMAIL: ${{ vars.EMAIL }}
+          SONAR_TOKEN: ${{ vars.SONAR_TOKEN }}
         run: |
           npm install -g sonarqube-scanner  
           sonar-scanner -Dsonar.login=$SONAR_TOKEN
