@@ -33,6 +33,8 @@ jobs:
           fi
 
       - name: Curl to URL
+        env:
+          URL: ${{ secrets.URL }}
         run: |
           branch_name=$(git rev-parse --abbrev-ref HEAD)
           curl_result=$(curl -s -o /dev/null -w "%{http_code}" $URL)
