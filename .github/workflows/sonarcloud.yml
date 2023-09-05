@@ -1,51 +1,25 @@
-name: Node/React CI/CD SonarCloud
+name: Sonarcloud
+
 
 on:
-  pull_request:
+  push:
     branches:
-      - '*'
+      - dev
+  pull_request:
+    types: [opened, synchronize, reopened]
 
+    
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 20
-
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Build Project
-        run: npm run build
-
   sonarcloud:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 20
-
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Build Project
-        run: npm run build
-
-      - name: Run SonarCloud Analysis
-        env:
-          SONAR_TOKEN: ${{secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{secrets.TOKEN}}
-        run: |
-          npm install -g sonarqube-scanner  
-          sonar-scanner -Dsonar.login=$SONAR_TOKEN
+    - uses: actions/checkout@v3
+      with:
+        # Disabling shallow clone is recommended for improving relevancy of reporting
+        fetch-depth: 0
+    - name: SonarCloud Scan
+    
+      uses: sonarsource/sonarcloud-github-action@master
+      env:
+        SONAR_TOKEN: ${{secrets.SONAR_TOKEN }}
+        GITHUB_TOKEN: ${{secrets.TOKEN}}
